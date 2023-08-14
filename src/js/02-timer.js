@@ -2,17 +2,15 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
 // HTML ELEMENTS
-const input = document.querySelector("#datetime-picker")
-const startBtn = document.querySelector("[data-start]")
-const days = document.querySelector("[data-days]")
-const hours = document.querySelector("[data-hours]")
-const minutes = document.querySelector("[data-minutes]")
-const seconds = document.querySelector("[data-seconds]")
-const spans = document.querySelectorAll(".value")
+const input = document.querySelector("#datetime-picker");
+const startBtn = document.querySelector("[data-start]");
+const days = document.querySelector("[data-days]");
+const hours = document.querySelector("[data-hours]");
+const minutes = document.querySelector("[data-minutes]");
+const seconds = document.querySelector("[data-seconds]");
 
 
-startBtn.setAttribute("disabled", true)
-
+startBtn.setAttribute("disabled", true);
 
 const options = {
     enableTime: true,
@@ -20,57 +18,44 @@ const options = {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-  
       if(selectedDates[0] < options.defaultDate) {
-        window.alert("Please choose a date in the future")
+        window.alert("Please choose a date in the future");
       }
       if(selectedDates[0] > options.defaultDate) {
-        startBtn.removeAttribute("disabled")
+        startBtn.removeAttribute("disabled");
       }
     },
   };
 
-  flatpickr(input, options)
- 
+  flatpickr(input, options);
 
   // TIMER
 
-  startBtn.addEventListener("click", onStart)
+  startBtn.addEventListener("click", onStart);
  
   function onStart () {
-  startBtn.setAttribute("disabled", true)
+  startBtn.setAttribute("disabled", true);
   
-  const date = new Date (input.value)
-  let timer = date.getTime() - options.defaultDate.getTime()
+  const date = new Date (input.value);
+  let timer = date.getTime() - options.defaultDate.getTime();
  
   
   const id = setInterval(() => {
-    timer -= 1000
-    const timerConverter = convertMs(timer)
+    timer -= 1000;
+    const timerConverter = convertMs(timer);
     
-    days.textContent = timerConverter.days
-    hours.textContent = timerConverter.hours
-    minutes.textContent = timerConverter.minutes
-    seconds.textContent = timerConverter.seconds
+    days.textContent = addLeadingZero(timerConverter.days);
+    hours.textContent = addLeadingZero(timerConverter.hours);
+    minutes.textContent =  addLeadingZero(timerConverter.minutes);
+    seconds.textContent = addLeadingZero(timerConverter.seconds);
 
     if (timer < 1000) {
-     clearInterval(id)
+     clearInterval(id);
     }
   }, 1000)
  }
 
-
- function addLeadingZero(value) {
-     spans.forEach(span => {
-     if(span.textContent.length < 2) {
-    span.textContent.padStart(2, "0")
-    
-     }
-  })
- }
-
-
-// CONVERTER
+  // CONVERTER
 
  function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -90,3 +75,8 @@ const options = {
 
   return { days, hours, minutes, seconds };
 }
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+  }
+  
+ 
